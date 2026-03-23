@@ -36,62 +36,64 @@ export default function HeroSection() {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       // Nav slides in
-      tl.fromTo(
-        navRef.current,
-        { y: -60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9 }
-      );
+      if (navRef.current) {
+        tl.fromTo(
+          navRef.current,
+          { y: -60, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9 }
+        );
+      }
 
       // Letters stagger in
-      const letterEls = headlineRef.current?.querySelectorAll(".letter");
-      if (letterEls) {
-        tl.fromTo(
-          letterEls,
-          { y: 80, opacity: 0, rotateX: -60 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            duration: 0.8,
-            stagger: 0.025,
-          },
-          "-=0.4"
-        );
-      }
+      tl.fromTo(
+        ".letter",
+        { y: 80, opacity: 0, rotateX: -60 },
+        {
+          y: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 0.8,
+          stagger: 0.025,
+        },
+        "-=0.4"
+      );
 
       // Tagline
-      tl.fromTo(
-        taglineRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7 },
-        "-=0.3"
-      );
-
-      // Stats stagger
-      const statEls = statsRef.current?.querySelectorAll(".stat-item");
-      if (statEls) {
+      if (taglineRef.current) {
         tl.fromTo(
-          statEls,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, stagger: 0.12 },
-          "-=0.4"
+          taglineRef.current,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
+          "-=0.3"
         );
       }
 
-      // Orb entrance
+      // Stats stagger
       tl.fromTo(
-        orbRef.current,
-        { scale: 0.4, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.2, ease: "elastic.out(1, 0.6)" },
-        "-=1.0"
+        ".stat-item",
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.12 },
+        "-=0.4"
       );
 
-      tl.fromTo(
-        [ring2Ref.current, ringRef.current],
-        { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power2.out" },
-        "-=0.8"
-      );
+      // Orb entrance
+      if (orbRef.current) {
+        tl.fromTo(
+          orbRef.current,
+          { scale: 0.4, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.2, ease: "elastic.out(1, 0.6)" },
+          "-=1.0"
+        );
+      }
+
+      if (ring2Ref.current && ringRef.current) {
+        tl.fromTo(
+          [ring2Ref.current, ringRef.current],
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power2.out" },
+          "-=0.8"
+        );
+      }
 
       // ── SCROLL-BASED ANIMATIONS ────────────────────────────────────
       const scrollTl = gsap.timeline({
@@ -111,111 +113,128 @@ export default function HeroSection() {
       });
 
       // Main orb: moves across screen + grows
-      scrollTl
-        .to(orbRef.current, {
+      if (orbRef.current) {
+        scrollTl.to(orbRef.current, {
           x: () => window.innerWidth * 0.35,
           y: -60,
           scale: 2.8,
           opacity: 0.6,
           ease: "none",
-        }, 0)
-        .to(ring2Ref.current, {
+        }, 0);
+      }
+      
+      if (ring2Ref.current) {
+        scrollTl.to(ring2Ref.current, {
           x: () => window.innerWidth * 0.35,
           y: -60,
           scale: 2.8,
           opacity: 0,
           ease: "none",
-        }, 0)
-        .to(ringRef.current, {
+        }, 0);
+      }
+
+      if (ringRef.current) {
+        scrollTl.to(ringRef.current, {
           x: () => window.innerWidth * 0.38,
           y: -55,
           scale: 3.5,
           opacity: 0,
           ease: "none",
         }, 0);
+      }
 
       // Orb 2: moves opposite
-      scrollTl.to(orb2Ref.current, {
-        x: () => -window.innerWidth * 0.3,
-        y: 100,
-        scale: 2,
-        opacity: 0.3,
-        ease: "none",
-      }, 0);
+      if (orb2Ref.current) {
+        scrollTl.to(orb2Ref.current, {
+          x: () => -window.innerWidth * 0.3,
+          y: 100,
+          scale: 2,
+          opacity: 0.3,
+          ease: "none",
+        }, 0);
+      }
 
       // Orb 3: drifts up
-      scrollTl.to(orb3Ref.current, {
-        y: -200,
-        x: 80,
-        scale: 1.5,
-        opacity: 0.15,
-        ease: "none",
-      }, 0);
+      if (orb3Ref.current) {
+        scrollTl.to(orb3Ref.current, {
+          y: -200,
+          x: 80,
+          scale: 1.5,
+          opacity: 0.15,
+          ease: "none",
+        }, 0);
+      }
 
       // Headline letters scatter
-      if (letterEls) {
-        scrollTl.to(
-          letterEls,
-          {
-            y: (i) => (i % 3 === 0 ? -120 : i % 3 === 1 ? -60 : -90),
-            x: (i) => (i % 2 === 0 ? -30 : 30),
-            opacity: 0,
-            stagger: 0.015,
-            ease: "none",
-          },
-          0.1
-        );
-      }
-
-      // Tagline fades
-      scrollTl.to(taglineRef.current, { y: -80, opacity: 0, ease: "none" }, 0);
-
-      // Stats slide out
-      if (statEls) {
-        scrollTl.to(
-          statEls,
-          { y: 60, opacity: 0, stagger: 0.08, ease: "none" },
-          0
-        );
-      }
-
-      // Mask reveal — a new layer slides up
-      scrollTl.fromTo(
-        maskRef.current,
-        { scaleY: 0, transformOrigin: "bottom center" },
-        { scaleY: 1, ease: "none" },
-        0.5
+      scrollTl.to(
+        ".letter",
+        {
+          y: (i: number) => (i % 3 === 0 ? -120 : i % 3 === 1 ? -60 : -90),
+          x: (i: number) => (i % 2 === 0 ? -30 : 30),
+          opacity: 0,
+          stagger: 0.015,
+          ease: "none",
+        },
+        0.1
       );
 
+      // Tagline fades
+      if (taglineRef.current) {
+        scrollTl.to(taglineRef.current, { y: -80, opacity: 0, ease: "none" }, 0);
+      }
+
+      // Stats slide out
+      scrollTl.to(
+        ".stat-item",
+        { y: 60, opacity: 0, stagger: 0.08, ease: "none" },
+        0
+      );
+
+      // Mask reveal — a new layer slides up
+      if (maskRef.current) {
+        scrollTl.fromTo(
+          maskRef.current,
+          { scaleY: 0, transformOrigin: "bottom center" },
+          { scaleY: 1, ease: "none" },
+          0.5
+        );
+      }
+
       // ── FLOATING AMBIENT LOOP ──────────────────────────────────────
-      gsap.to(orbRef.current, {
-        y: "+=18",
-        x: "+=10",
-        duration: 3.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
+      if (orbRef.current) {
+        gsap.to(orbRef.current, {
+          y: "+=18",
+          x: "+=10",
+          duration: 3.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
 
-      gsap.to(orb2Ref.current, {
-        y: "-=22",
-        x: "+=15",
-        duration: 4.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1.2,
-      });
+      if (orb2Ref.current) {
+        gsap.to(orb2Ref.current, {
+          y: "-=22",
+          x: "+=15",
+          duration: 4.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 1.2,
+        });
+      }
 
-      gsap.to(orb3Ref.current, {
-        y: "+=14",
-        x: "-=12",
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.7,
-      });
+      if (orb3Ref.current) {
+        gsap.to(orb3Ref.current, {
+          y: "+=14",
+          x: "-=12",
+          duration: 5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 0.7,
+        });
+      }
 
     }, sectionRef);
 
@@ -491,7 +510,7 @@ export default function HeroSection() {
           style={{
             background: "linear-gradient(135deg, #d4f200 0%, #a8c200 100%)",
             transformOrigin: "bottom center",
-            scaleY: 0,
+            transform: "scaleY(0)",
           }}
         >
           <div className="text-center">

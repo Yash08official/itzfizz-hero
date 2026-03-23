@@ -54,7 +54,7 @@ export default function BelowFold() {
       }
 
       gsap.fromTo(
-        sectionRef.current?.querySelector(".section-title"),
+        ".section-title",
         { y: 40, opacity: 0 },
         {
           y: 0,
